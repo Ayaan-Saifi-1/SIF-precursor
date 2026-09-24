@@ -23,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { PanelLeftIcon } from 'lucide-react';
+import { PanelLeftIcon, Menu } from 'lucide-react';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -187,13 +187,14 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground border-r border-[#1c3552]"
           style={
             {
-              '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
+              '--sidebar-width': 'min(82vw, 280px)',
             } as React.CSSProperties
           }
           side={side}
+          showCloseButton={true}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Sidebar</SheetTitle>
@@ -263,15 +264,16 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      size="icon-sm"
-      className={cn(className)}
+      size="icon"
+      className={cn('mobile-trigger-btn', className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
+      aria-label="Toggle Navigation Menu"
       {...props}
     >
-      <PanelLeftIcon className="cn-rtl-flip" />
+      {props.children || <Menu className="sidebar-hamburger-icon size-5 text-white" size={22} />}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

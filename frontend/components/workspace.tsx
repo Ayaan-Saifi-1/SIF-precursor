@@ -47,6 +47,7 @@ import {
   SidebarHeader,
   SidebarFooter,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   Sheet,
@@ -404,6 +405,35 @@ function DensityTable({ rows }: { rows: any[] }) {
     </Table>
   );
 }
+
+function SidebarNavItems({
+  navigation,
+  view,
+}: {
+  navigation: readonly (readonly [string, string, any])[];
+  view: string;
+}) {
+  const { isMobile, setOpenMobile } = useSidebar();
+  return (
+    <nav aria-label="Main navigation">
+      {navigation.map(([key, label, Icon]) => (
+        <Link
+          aria-current={key === view ? 'page' : undefined}
+          href={'/' + key}
+          key={key}
+          className={'nav-link ' + (key === view ? 'active' : '')}
+          onClick={() => {
+            if (isMobile) setOpenMobile(false);
+          }}
+        >
+          <Icon size={19} />
+          <span>{label}</span>
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 export default function Workspace({ view }: { view: View }) {
   const [health, setHealth] = useState<any>(null),
     [charts, setCharts] = useState<DashboardChartData | null>(null),
@@ -494,19 +524,7 @@ export default function Workspace({ view }: { view: View }) {
         </SidebarHeader>
         <SidebarContent>
           <p className="nav-label">Workspace</p>
-          <nav aria-label="Main navigation">
-            {navigation.map(([key, label, Icon]) => (
-              <Link
-                aria-current={key === view ? 'page' : undefined}
-                href={'/' + key}
-                key={key}
-                className={'nav-link ' + (key === view ? 'active' : '')}
-              >
-                <Icon size={19} />
-                <span>{label}</span>
-              </Link>
-            ))}
-          </nav>
+          <SidebarNavItems navigation={navigation} view={view} />
         </SidebarContent>
         <SidebarFooter className="sidebar-footer">
           <div className="avatar">MR</div>
@@ -520,13 +538,13 @@ export default function Workspace({ view }: { view: View }) {
         <header className="topbar">
           <div className="inline">
             <SidebarTrigger className="mobile-trigger" />
-            <span className="muted">Operations</span>
-            <ChevronRight size={13} />
-            <strong>{names[view]}</strong>
+            <span className="muted topbar-crumb-label">Operations</span>
+            <ChevronRight size={13} className="topbar-crumb-sep" />
+            <strong className="topbar-page-title">{names[view]}</strong>
           </div>
           <div className="workspace-status">
             <span className="demo-indicator" />
-            Demo workspace
+            <span className="workspace-status-text">Demo workspace</span>
           </div>
         </header>
         <main id="main-content">
