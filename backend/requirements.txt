@@ -1,0 +1,15 @@
+Django==5.2.17
+djangorestframework==3.16.1
+django-cors-headers==4.9.0
+psycopg[binary]==3.3.5
+scipy==1.18.1
+openpyxl==3.1.5
+waitress==3.0.2
+transformers==4.57.6
+torch==2.14.0
+xgboost==3.4.1
+scikit-learn==1.9.0
+hdbscan==0.8.44
+rapidfuzz==3.14.6
+numpy==2.5.3
+joblib==1.6.0

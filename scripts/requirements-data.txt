@@ -1,0 +1,2 @@
+# Isolated PDF dataset preparation; not required for application requests.
+pypdf==6.10.0

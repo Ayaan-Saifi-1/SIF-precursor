@@ -1,0 +1,49 @@
+services:
+  # =========================================================================
+  # 1. Ascension Backend (Django API + ML Pipeline)
+  # =========================================================================
+  - type: web
+    name: ascension-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt && python backend/manage.py setup_deployment
+    startCommand: python scripts/serve.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DEMO_MODE
+        value: "1"
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "localhost,127.0.0.1,onrender.com,.onrender.com"
+      - key: POSTGRES_SSLMODE
+        value: "require"
+      - key: DATABASE_URL
+        sync: false # Paste your Supabase connection string
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false # e.g. admin
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false # e.g. YourSecretPassword123
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false # e.g. akalisha009@gmail.com
+
+  # =========================================================================
+  # 2. Ascension Frontend (Vite / Vinext UI)
+  # =========================================================================
+  - type: web
+    name: ascension-frontend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npx vinext start --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.0
+      - key: VITE_API_BASE_URL
+        sync: false # Set to https://<your-ascension-backend>.onrender.com/api
